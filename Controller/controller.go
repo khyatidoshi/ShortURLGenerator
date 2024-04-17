@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	model "github.com/khyatidoshi/ShourtURLGenerator/Model"
-	svc "github.com/khyatidoshi/ShourtURLGenerator/Service"
+	model "github.com/khyatidoshi/ShortURLGenerator/Model"
+	svc "github.com/khyatidoshi/ShortURLGenerator/Service"
 )
 
 // Controllers

@@ -1,8 +1,8 @@
 package service
 
 import (
-	repo "github.com/khyatidoshi/ShourtURLGenerator/Repository"
-	utils "github.com/khyatidoshi/ShourtURLGenerator/Utils"
+	repo "github.com/khyatidoshi/ShortURLGenerator/Repository"
+	utils "github.com/khyatidoshi/ShortURLGenerator/Utils"
 )
 
 type URLService struct {
