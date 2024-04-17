@@ -1,5 +1,9 @@
 package models
 
+var GenerateShortURLReq struct {
+	LongURL string `json: "long_url"`
+}
+
 // ShortURL represents a short URL entry
 type ShortURL struct {
 	Short  string `json:"short"`

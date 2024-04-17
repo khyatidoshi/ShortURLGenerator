@@ -5,18 +5,19 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/khyatidoshi/ShourtURLGenerator/Controller"
+	controller "github.com/khyati/ShortURLGenerator/Controller"
 )
 
 func main() {
 	// Initialize router
 	r := mux.NewRouter()
 
+	handler := controller.NewURLController()
 	// Define routes
-	r.HandleFunc("/generate", Controller.ShortURLController()()).Methods("POST")
-	r.HandleFunc("/{short}", Controller.RedirectController()).Methods("GET")
-	r.HandleFunc("/stats/{short}", Controller.StatsController()).Methods("GET")
-	r.HandleFunc("/delete/{short}", Controller.DeleteShortURLController).Methods("DELETE")
+	r.HandleFunc("/generate", handler.GenerateShortURLController).Methods("POST")
+	// r.HandleFunc("/{short}", handler.RedirectController).Methods("GET")
+	// r.HandleFunc("/stats/{short}", handler.GetStatsController()).Methods("GET")
+	// r.HandleFunc("/delete/{short}", handler.DeleteShortURLController).Methods("DELETE")
 
 	// Start HTTP server
 	log.Println("Server started on :8080")
