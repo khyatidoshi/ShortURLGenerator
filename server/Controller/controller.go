@@ -21,14 +21,14 @@ func NewURLController() *URLController {
 	}
 }
 func (cnt *URLController) GenerateShortURLController(w http.ResponseWriter, r *http.Request) {
-	req := model.GenerateShortURLReq
+	req := model.GenerateShortURLReq{}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	shortURL, err := cnt.URLService.ShortenURL(req.LongURL)
+	shortURL, err := cnt.URLService.ShortenURL(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -41,7 +41,15 @@ func (cnt *URLController) GenerateShortURLController(w http.ResponseWriter, r *h
 
 func (cnt *URLController) RedirectController(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	longURL, err := cnt.URLService.GetLongURL(vars["shortUrl"])
+	shortURL := vars["short"]
+
+	// Check if the short URL is empty
+	if shortURL == "" {
+		http.Error(w, "Short URL is empty", http.StatusBadRequest)
+		return
+	}
+
+	longURL, err := cnt.URLService.GetLongURL(shortURL)
 	if err != nil {
 		http.Error(w, "URL not found", http.StatusNotFound)
 		return

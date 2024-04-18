@@ -1,15 +1,15 @@
-package models
+package model
 
-var GenerateShortURLReq struct {
-	LongURL string `json: "long_url"`
+type GenerateShortURLReq struct {
+	LongURL    string `json:"long_url"`
+	ExpiryDate int64  `json:"expiry,omitempty"`
 }
 
-// ShortURL represents a short URL entry
-type ShortURL struct {
-	Short  string `json:"short"`
-	Long   string `json:"long"`
-	Expiry int64  `json:"expiry,omitempty"`
-	// Add more fields as needed (creation time, etc.)
+type UrlData struct {
+	tableName  struct{} `pg:"tinyurldata,alias:tinyurldata"`
+	ShortURL   string   `json:"short_url" pg:"short_url,pk"`
+	LongURL    string   `json:"long_url" pg:"long_url,notnull"`
+	ExpiryDate int64    `json:"expiry,omitempty" pg:"expiry"`
 }
 
 // AccessCounts represents access counts for a short URL

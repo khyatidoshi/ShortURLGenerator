@@ -1,6 +1,9 @@
 package service
 
 import (
+	"fmt"
+
+	model "github.com/khyatidoshi/ShortURLGenerator/server/Model"
 	repo "github.com/khyatidoshi/ShortURLGenerator/server/Repository"
 	utils "github.com/khyatidoshi/ShortURLGenerator/server/Utils"
 )
@@ -15,21 +18,29 @@ func NewURLService() *URLService {
 	}
 }
 
-func (svc *URLService) ShortenURL(longURL string) (string, error) {
+func (svc *URLService) ShortenURL(req model.GenerateShortURLReq) (string, error) {
 	shortURL := utils.GenerateShortURL()
-	// err := svc.URLRepo.StoreURL(shortURL, longURL)
-	// if err != nil {
-	// 	return "", err
-	// }
-	return shortURL, nil
+
+	urlData := &model.UrlData{
+		ShortURL:   shortURL,
+		LongURL:    req.LongURL,
+		ExpiryDate: req.ExpiryDate,
+	}
+
+	err := svc.URLRepo.StoreURL(urlData)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("http://localhost:8080/", shortURL), nil
 }
 
 func (svc *URLService) GetLongURL(shortURL string) (string, error) {
-	longURL := " -------- "
-	// longURL, err := svc.URLRepo.FetchURL(shortURL)
-	// if err != nil {
-	// 	return "", err
-	// }
+	longURL, err := svc.URLRepo.FetchURL(shortURL)
+	if err != nil {
+		return "", err
+	}
+
 	return longURL, nil
 }
 
