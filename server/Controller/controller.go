@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	model "github.com/khyatidoshi/ShortURLGenerator/Model"
-	svc "github.com/khyatidoshi/ShortURLGenerator/Service"
+	"github.com/gorilla/mux"
+	model "github.com/khyati/ShortURLGenerator/server/Model"
+	svc "github.com/khyati/ShortURLGenerator/server/Service"
 )
 
 // Controllers
@@ -38,14 +39,26 @@ func (cnt *URLController) GenerateShortURLController(w http.ResponseWriter, r *h
 	json.NewEncoder(w).Encode(response)
 }
 
-func RedirectController(w http.ResponseWriter, r *http.Request) {
-	// Redirect short URL logic
+func (cnt *URLController) RedirectController(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	longURL, err := cnt.URLService.GetLongURL(vars["shortUrl"])
+	if err != nil {
+		http.Error(w, "URL not found", http.StatusNotFound)
+		return
+	}
+	http.Redirect(w, r, longURL, http.StatusMovedPermanently)
 }
 
 func StatsController(w http.ResponseWriter, r *http.Request) {
 	// Access counts logic
 }
 
-func DeleteShortURLController(w http.ResponseWriter, r *http.Request) {
-	// Delete short URL logic
+func (cnt *URLController) DeleteShortURLController(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	err := cnt.URLService.DeleteURL(vars["shortUrl"])
+	if err != nil {
+		http.Error(w, "URL not found", http.StatusNotFound)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
