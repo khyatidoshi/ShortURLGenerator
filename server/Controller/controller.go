@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	model "github.com/khyati/ShortURLGenerator/server/Model"
-	svc "github.com/khyati/ShortURLGenerator/server/Service"
+	model "github.com/khyatidoshi/ShortURLGenerator/server/Model"
+	svc "github.com/khyatidoshi/ShortURLGenerator/server/Service"
 )
 
 // Controllers

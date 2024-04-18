@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	controller "github.com/khyati/ShortURLGenerator/server/Controller"
+	controller "github.com/khyatidoshi/ShortURLGenerator/server/Controller"
 )
 
 func main() {
