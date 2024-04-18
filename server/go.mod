@@ -1,4 +1,4 @@
-module github.com/khyati/ShortURLGenerator
+module github.com/khyati/ShortURLGenerator/server
 
 go 1.22.2
 

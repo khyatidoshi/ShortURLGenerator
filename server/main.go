@@ -20,6 +20,6 @@ func main() {
 	r.HandleFunc("/delete/{short}", handler.DeleteShortURLController).Methods("DELETE")
 
 	// Start HTTP server
-	log.Println("Server started on :8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Println("Server started on :8081")
+	log.Fatal(http.ListenAndServe(":8081", r))
 }
