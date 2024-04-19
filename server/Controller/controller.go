@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	model "github.com/khyatidoshi/ShortURLGenerator/server/Model"
 	svc "github.com/khyatidoshi/ShortURLGenerator/server/Service"
+	utils "github.com/khyatidoshi/ShortURLGenerator/server/Utils"
 )
 
 // Controllers
@@ -28,7 +29,19 @@ func (cnt *URLController) GenerateShortURLController(w http.ResponseWriter, r *h
 		return
 	}
 
-	shortURL, err := cnt.URLService.ShortenURL(req)
+	// Validate URL
+	if err := utils.ValidateURL(req.LongURL); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	expiryDate, err := utils.ValidateExpiryDate(req.ExpiryDate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	shortURL, err := cnt.URLService.ShortenURL(req, expiryDate)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -59,14 +72,4 @@ func (cnt *URLController) RedirectController(w http.ResponseWriter, r *http.Requ
 
 func StatsController(w http.ResponseWriter, r *http.Request) {
 	// Access counts logic
-}
-
-func (cnt *URLController) DeleteShortURLController(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	err := cnt.URLService.DeleteURL(vars["shortUrl"])
-	if err != nil {
-		http.Error(w, "URL not found", http.StatusNotFound)
-		return
-	}
-	w.WriteHeader(http.StatusNoContent)
 }

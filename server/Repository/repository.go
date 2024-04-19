@@ -2,6 +2,8 @@ package repository
 
 import (
 	"fmt"
+	"log"
+	"time"
 
 	pg "github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"
@@ -28,7 +30,7 @@ func NewURLRepository() *URLRepository {
 
 	// Check if the connection was successful
 	if pgdb == nil {
-		fmt.Print("failed to connect to the Postgres database")
+		log.Print("failed to connect to the Postgres database")
 	}
 
 	createSchema(pgdb)
@@ -44,7 +46,7 @@ func createSchema(db *pg.DB) {
 			IfNotExists: true,
 		})
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 	}
 }
@@ -67,4 +69,10 @@ func (repo *URLRepository) FetchURL(shortURL string) (string, error) {
 	}
 
 	return urlData.LongURL, nil
+}
+
+func (repo *URLRepository) DeleteExpiredURLs() error {
+	query := "DELETE FROM tinyurldata WHERE expiry < ?"
+	_, err := repo.Postgres.Exec(query, time.Now().Unix())
+	return err
 }

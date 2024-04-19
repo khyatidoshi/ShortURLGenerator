@@ -2,7 +2,7 @@ package model
 
 type GenerateShortURLReq struct {
 	LongURL    string `json:"long_url"`
-	ExpiryDate int64  `json:"expiry,omitempty"`
+	ExpiryDate string `json:"expiry,omitempty"`
 }
 
 type UrlData struct {
@@ -12,9 +12,9 @@ type UrlData struct {
 	ExpiryDate int64    `json:"expiry,omitempty" pg:"expiry"`
 }
 
-// AccessCounts represents access counts for a short URL
-type AccessCounts struct {
-	Last24Hours int `json:"last_24_hours"`
-	LastWeek    int `json:"last_week"`
-	AllTime     int `json:"all_time"`
+// Access event details
+type AccessDetails struct {
+	ShortURL        string `json:"short_url" pg:"short_url,notnull"`
+	AccessTimestamp int64  `json:"expiry,omitempty" pg:"access_timestamp,notnull"`
+	ResponseStatus  string `json:"response_status" pg:"response_status,notnull"`
 }

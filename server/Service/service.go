@@ -18,13 +18,13 @@ func NewURLService() *URLService {
 	}
 }
 
-func (svc *URLService) ShortenURL(req model.GenerateShortURLReq) (string, error) {
+func (svc *URLService) ShortenURL(req model.GenerateShortURLReq, expiry int64) (string, error) {
 	shortURL := utils.GenerateShortURL()
 
 	urlData := &model.UrlData{
 		ShortURL:   shortURL,
 		LongURL:    req.LongURL,
-		ExpiryDate: req.ExpiryDate,
+		ExpiryDate: expiry,
 	}
 
 	err := svc.URLRepo.StoreURL(urlData)
@@ -32,7 +32,7 @@ func (svc *URLService) ShortenURL(req model.GenerateShortURLReq) (string, error)
 		return "", err
 	}
 
-	return fmt.Sprintf("http://localhost:8080/", shortURL), nil
+	return fmt.Sprintf("http://localhost:4000/%s", shortURL), nil
 }
 
 func (svc *URLService) GetLongURL(shortURL string) (string, error) {
@@ -44,10 +44,6 @@ func (svc *URLService) GetLongURL(shortURL string) (string, error) {
 	return longURL, nil
 }
 
-func (svc *URLService) DeleteURL(shortURL string) error {
-	// err := svc.URLRepo.DeleteURL(shortURL)
-	// if err != nil {
-	// 	return err
-	// }
-	return nil
+func (svc *URLService) DeleteURL() error {
+	return svc.URLRepo.DeleteExpiredURLs()
 }

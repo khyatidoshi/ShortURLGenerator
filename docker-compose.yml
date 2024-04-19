@@ -8,20 +8,26 @@ services:
       - ./server:/app
     ports:
       - '8081'
+    depends_on:
+      - postgres
     expose:
       - '8081'
     restart: always
 
-  redis-server:
-    image: redis
+  postgres:
+    image: postgres:15-alpine
     ports:
-      - '6379:6379'
+      - '5432:5432'
+    # environment:
+    #   - POSTGRES_USER='postgres'
+    #   - POSTGRES_PASSWORD='postgres'
+      # - POSTGRES_DB=
     restart: always
 
-  # zookeeper-server:
-  #   image: zookeeper
+  # redis-server:
+  #   image: redis
   #   ports:
-  #     - '2181:2181'
+  #     - '6379:6379'
   #   restart: always
 
   nginx:
