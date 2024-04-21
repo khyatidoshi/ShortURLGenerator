@@ -56,20 +56,33 @@ func (cnt *URLController) RedirectController(w http.ResponseWriter, r *http.Requ
 	vars := mux.Vars(r)
 	shortURL := vars["short"]
 
-	// Check if the short URL is empty
-	if shortURL == "" {
-		http.Error(w, "Short URL is empty", http.StatusBadRequest)
-		return
-	}
-
 	longURL, err := cnt.URLService.GetLongURL(shortURL)
 	if err != nil {
+		go cnt.URLService.RecordURLAccess(shortURL)
 		http.Error(w, "URL not found", http.StatusNotFound)
 		return
 	}
+
+	go cnt.URLService.RecordURLAccess(shortURL)
 	http.Redirect(w, r, longURL, http.StatusMovedPermanently)
 }
 
-func StatsController(w http.ResponseWriter, r *http.Request) {
-	// Access counts logic
+func (cnt *URLController) GetStatsController(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	shortURL := vars["short"]
+
+	accessCounts, err := cnt.URLService.GetAccessCounts(shortURL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	response := map[string]interface{}{
+		"access_24hour_counts":   accessCounts.DayCount,
+		"access_week_counts":     accessCounts.WeekCount,
+		"access_lifetime_counts": accessCounts.TotalCount,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }

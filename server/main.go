@@ -18,7 +18,7 @@ func main() {
 	// Define routes
 	r.HandleFunc("/generate", handler.GenerateShortURLController).Methods("POST")
 	r.HandleFunc("/{short}", handler.RedirectController).Methods("GET")
-	// r.HandleFunc("/stats/{short}", handler.GetStatsController()).Methods("GET")
+	r.HandleFunc("/stats/{short}", handler.GetStatsController).Methods("GET")
 
 	go startScheduledTasks(handler)
 

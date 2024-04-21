@@ -9,7 +9,7 @@ import (
 )
 
 func GenerateShortURL() string {
-	newUUID := uuid.New()
+	newUUID, _ := uuid.NewRandom()
 	return newUUID.String()[:8]
 }
 
@@ -22,6 +22,10 @@ func ValidateURL(u string) error {
 }
 
 func ValidateExpiryDate(date string) (int64, error) {
+	if date == "" {
+		return 0, nil
+	}
+
 	expiryDate, err := time.Parse("2006-01-02", date)
 	if err != nil {
 		return expiryDate.Unix(), fmt.Errorf("invalid expiry date format")

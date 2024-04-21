@@ -13,9 +13,16 @@ services:
     expose:
       - '8081'
     restart: always
-
+    deploy:
+      mode: replicated
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.5'  
+          memory: 512M  
+          
   postgres:
-    image: postgres:15-alpine
+    image: postgres:14.3
     ports:
       - '5432:5432'
     # environment:
