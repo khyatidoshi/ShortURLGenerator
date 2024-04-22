@@ -71,6 +71,32 @@ git clone https://github.com/khyatidoshi/ShortURLGenerator.git
 docker compose up --build
 
 ```
+- Use either the Postman collection or the following endpoints:<br>
+<i>To generate a short URL:</i> <br>
+```sh
+http://localhost:4000/generate 
+
+```
+Example Request Body: 
+```sh
+{
+  "long_url": "https://facebook.com",
+  "expiry":"2026-02-05"
+}
+```
+<br>
+<i>To generate get Long URL / Redirection: </i> 
+
+```sh
+http://localhost:4000/{{short-url}}
+```
+
+<i>To get usage of the past 24 hours, past week, and all time:</i> <br>
+```sh
+http://localhost:4000/stats/{{short-url}}
+```
+<i>**Note**:</i>
+As the URL expires on a particular date irrespective of the time, the deletion happens every 24 hours. The data queue in Kafka is consumed every 15 minutes. 
 ### Testing 
 - Download Artillery:<br>
 ```sh
