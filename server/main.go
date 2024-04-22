@@ -30,7 +30,7 @@ func main() {
 
 func startScheduledDeleteTasks(handler *controller.URLController) {
 	fmt.Println("deleting expired URLs scheduled at : ", time.Now())
-	ticker := time.NewTicker(time.Hour)
+	ticker := time.NewTicker(24 * time.Hour)
 	defer ticker.Stop()
 
 	for {
@@ -48,8 +48,7 @@ func startScheduledDeleteTasks(handler *controller.URLController) {
 
 func startKafkaConsumer(handler *controller.URLController) {
 	fmt.Println("started Kafka consumer at : ", time.Now())
-	// ticker := time.NewTicker(15 * time.Minute)
-	ticker := time.NewTicker(5 * time.Minute)
+	ticker := time.NewTicker(15 * time.Minute)
 	defer ticker.Stop()
 
 	for {
