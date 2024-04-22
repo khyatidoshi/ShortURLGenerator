@@ -105,7 +105,6 @@ func (repo *URLRepository) StoreURL(urlData *model.UrlData) error {
 func (repo *URLRepository) FetchURL(shortURL string) (string, error) {
 	longURL, err := repo.Redis.Get(shortURL).Result()
 	if err == nil {
-		fmt.Printf("pulled from cache")
 		return longURL, nil
 	}
 
@@ -176,6 +175,13 @@ func (repo *URLRepository) DeleteExpiredURLs() error {
 
 	if len(shortURLs) < 1 {
 		return nil
+	}
+
+	for _, shortURL := range shortURLs {
+		err := repo.Redis.Del(shortURL).Err()
+		if err != nil {
+			log.Printf("Failed to delete expired URL %s from Redis cache: %v", shortURL, err)
+		}
 	}
 
 	query := "SELECT short_url FROM short_url WHERE short_url IN ?"
