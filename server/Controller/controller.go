@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	kafka "github.com/khyatidoshi/ShortURLGenerator/server/Kafka"
 	model "github.com/khyatidoshi/ShortURLGenerator/server/Model"
 	svc "github.com/khyatidoshi/ShortURLGenerator/server/Service"
 	utils "github.com/khyatidoshi/ShortURLGenerator/server/Utils"
@@ -63,7 +64,9 @@ func (cnt *URLController) RedirectController(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	go cnt.URLService.RecordURLAccess(shortURL)
+	// go cnt.URLService.RecordURLAccess(shortURL)
+	// Publish redirection to Kafka
+	go kafka.PublishMessage("kafka:9092", "url-redirects", shortURL)
 	http.Redirect(w, r, longURL, http.StatusMovedPermanently)
 }
 

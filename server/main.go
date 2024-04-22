@@ -20,16 +20,17 @@ func main() {
 	r.HandleFunc("/{short}", handler.RedirectController).Methods("GET")
 	r.HandleFunc("/stats/{short}", handler.GetStatsController).Methods("GET")
 
-	go startScheduledTasks(handler)
+	go startScheduledDeleteTasks(handler)
+	go startKafkaConsumer(handler)
 
 	// Start HTTP server
 	log.Println("Server started on :8081")
 	log.Fatal(http.ListenAndServe(":8081", r))
 }
 
-func startScheduledTasks(handler *controller.URLController) {
+func startScheduledDeleteTasks(handler *controller.URLController) {
 	fmt.Println("deleting expired URLs scheduled at : ", time.Now())
-	ticker := time.NewTicker(time.Minute)
+	ticker := time.NewTicker(time.Hour)
 	defer ticker.Stop()
 
 	for {
@@ -41,6 +42,19 @@ func startScheduledTasks(handler *controller.URLController) {
 			} else {
 				log.Println("Expired URLs successfully deleted.")
 			}
+		}
+	}
+}
+
+func startKafkaConsumer(handler *controller.URLController) {
+	fmt.Println("started Kafka consumer at : ", time.Now())
+	ticker := time.NewTicker(15 * time.Minute)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			handler.URLService.ConsumeMessage()
 		}
 	}
 }

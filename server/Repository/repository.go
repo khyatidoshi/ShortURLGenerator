@@ -18,18 +18,12 @@ type URLRepository struct {
 }
 
 func NewURLRepository() *URLRepository {
-	// user := os.Getenv("DB_USER")
-	// password := os.Getenv("DB_PASSWORD")
-	// database := os.Getenv("DB_NAME")
-	// host := os.Getenv("DB_HOST")
-
 	pgdb := pg.Connect(&pg.Options{
 		User:     "postgres",
-		Password: "postgres",
-		Database: "postgres",
-		Addr:     "localhost:5432",
+		Password: "docker",
+		Database: "url_generator",
+		Addr:     "postgres:5432",
 	})
-
 	// Check if the connection was successful
 	if pgdb == nil {
 		log.Print("failed to connect to the Postgres database")
