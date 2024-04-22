@@ -7,7 +7,7 @@ type GenerateShortURLReq struct {
 
 type UrlData struct {
 	tableName  struct{} `pg:"tinyurldata,alias:tinyurldata"`
-	ShortURL   string   `json:"short_url" pg:"short_url,pk,on_delete:RESTRICT"`
+	ShortURL   string   `json:"short_url" pg:"short_url,pk"`
 	LongURL    string   `json:"long_url" pg:"long_url,notnull"`
 	ExpiryDate int64    `json:"expiry,omitempty" pg:"expiry"`
 }
@@ -15,7 +15,7 @@ type UrlData struct {
 // Access event details
 type AccessDetails struct {
 	tableName  struct{} `pg:"eventdetails,alias:eventdetails"`
-	ShortURL   string   `json:"short_url" pg:"short_url,notnull,on_update:CASCADE"`
+	ShortURL   string   `json:"short_url" pg:"short_url,notnull"`
 	AccessedAt int64    `json:"accessed_at" pg:"accessed_at,notnull"`
 }
 

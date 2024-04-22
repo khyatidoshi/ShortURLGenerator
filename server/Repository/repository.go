@@ -29,7 +29,7 @@ func NewURLRepository() *URLRepository {
 	}
 
 	// redisClient := redis.NewClient(&redis.Options{
-	// 	Addr: "redis:6379",
+	// 	Addr: "localhost:6379",
 	// 	// Add other configuration options
 	// })
 
