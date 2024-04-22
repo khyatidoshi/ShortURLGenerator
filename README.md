@@ -46,11 +46,12 @@ Let’s assume that each record in the database - approximately 1000 bytes. [The
 * Delete short URL if the date of expiry is given at short URL creation
   
 ## 📚 | Introduction
-- It uses Redis as a cache, and PostgresDB as a SQL database.
+- It uses Redis as a cache, and PostgresDB as an SQL database.
 - It uses Nginx which acts as a load balancer and a reverse proxy for the backend server.
 - It uses [Go's UUID package](https://pkg.go.dev/github.com/google/uuid) to generate an unique short URL.
-- The application is containerized by Docker.
 ## Design 
+![Test Image 1](https://github.com/khyatidoshi/ShortURLGenerator/blob/main/ShortURLWorkflow.JPG)
+<br>
 <b> Unique Short URL Generation </b>: Go's UUID package func NewRandom Randomly generated UUIDs having 122 random bits. We slice this and take the first 8 characters for generating short links. total unique links that can be produced would be 36^8 = 2,821,109,907,456. If we generate 500 new short URLs per sec, we would consume 500X60 = 30,000 new links every minute, and 500X60X60 = 1,800,000 new links every hour. Consuming 36^8 links would take more than 100 years. The chances of generating a duplicate short link would be 1/36^8 which is extremely low. 
 <br>
 <b> Choice of Database </b>: The data in this project has a proper structure - we already know exactly what details to save, and have an exact structure for the data. MySQL is widely used and queries in Postgres are similar. We also need to consider the cost of managing the Database with Cloud services like AWS. 
@@ -64,9 +65,27 @@ Let’s assume that each record in the database - approximately 1000 bytes. [The
 git clone https://github.com/khyatidoshi/ShortURLGenerator.git
 ```
 
-- Open the project folder and start the container with docker compose:<br>
+- Open the project folder and start the container with docker-compose:<br>
 
 ```yml
 docker compose up --build
 
+```
+### Testing 
+- Download Artillery:<br>
+```sh
+For global install --- npm install -g artillery
+```
+OR 
+```sh
+For local install --- npm install artillery
+```
+
+- Running the test:<br>
+```sh
+if globally installed ---  artillery run *filename*
+```
+OR 
+```sh
+if locally installed --- npx artillery run *filename*
 ```
