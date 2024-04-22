@@ -1,0 +1,76 @@
+config:
+  target: 'http://127.0.0.1:4000'
+  # target: 'http://192.168.1.228:4000'
+  http:
+    extendedMetrics: true
+  phases:
+    - duration: 60  # total test duration in seconds
+      arrivalRate: 5 # initial requests per second
+      rampTo: 10     # target requests per second
+      name: "Ramp up to 30 requests per second"
+    - duration: 60  # hold phase at peak load
+      name: "Sustained peak load"
+
+scenarios:
+  - name: "Generate short URLs for multiple websites"
+    flow:
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://google.com", "expiry": "2025-01-15"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://www.facebook.com", "expiry": "2025-02-20"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://twitter.com", "expiry": "2025-03-25"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://instagram.com", "expiry": "2025-04-30"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://linkedin.com", "expiry": "2025-05-05"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://youtube.com", "expiry": "2025-06-10"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://wikipedia.org", "expiry": "2025-07-15"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://amazon.com", "expiry": "2025-08-20"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://ebay.com", "expiry": "2025-09-25"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://netflix.com", "expiry": "2025-10-30"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://microsoft.com", "expiry": "2025-12-10"}'
+      - post:
+          url: "/generate"
+          headers:
+            Content-Type: "application/json"
+          body: '{"long_url": "https://apple.com", "expiry": "2026-01-15"}'

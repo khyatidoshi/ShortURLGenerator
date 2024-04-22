@@ -7,14 +7,13 @@ import (
 
 	pg "github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"
-	"github.com/go-redis/redis"
 
 	model "github.com/khyatidoshi/ShortURLGenerator/server/Model"
 )
 
 type URLRepository struct {
 	Postgres *pg.DB
-	Redis    *redis.Client
+	// Redis    *redis.Client
 }
 
 func NewURLRepository() *URLRepository {
@@ -29,21 +28,21 @@ func NewURLRepository() *URLRepository {
 		log.Print("failed to connect to the Postgres database")
 	}
 
-	redisClient := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
-		// Add other configuration options
-	})
+	// redisClient := redis.NewClient(&redis.Options{
+	// 	Addr: "redis:6379",
+	// 	// Add other configuration options
+	// })
 
-	_, err := redisClient.Ping().Result()
-	if err != nil {
-		log.Println("Failed to connect to Redis:", err)
-	}
+	// _, err := redisClient.Ping().Result()
+	// if err != nil {
+	// 	log.Println("Failed to connect to Redis:", err)
+	// }
 
 	createSchema(pgdb)
 
 	return &URLRepository{
 		Postgres: pgdb,
-		Redis:    redisClient,
+		// Redis:    redisClient,
 	}
 }
 
@@ -88,30 +87,30 @@ func (repo *URLRepository) StoreURL(urlData *model.UrlData) error {
 	}
 
 	// Cache the long URL and its corresponding short URL in Redis
-	err = repo.Redis.Set(urlData.ShortURL, urlData.LongURL, 0).Err()
-	if err != nil {
-		log.Println("Failed to cache URL:", err)
-	}
+	// err = repo.Redis.Set(urlData.ShortURL, urlData.LongURL, 0).Err()
+	// if err != nil {
+	// 	log.Println("Failed to cache URL:", err)
+	// }
 
 	return nil
 }
 
 func (repo *URLRepository) FetchURL(shortURL string) (string, error) {
-	longURL, err := repo.Redis.Get(shortURL).Result()
-	if err == nil {
-		return longURL, nil
-	}
+	// longURL, err := repo.Redis.Get(shortURL).Result()
+	// if err == nil {
+	// 	return longURL, nil
+	// }
 
 	urlData := new(model.UrlData)
-	err = repo.Postgres.Model(urlData).Where("short_url = ?", shortURL).Select()
+	err := repo.Postgres.Model(urlData).Where("short_url = ?", shortURL).Select()
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch URL: %v", err)
 	}
 
-	err = repo.Redis.Set(shortURL, urlData.LongURL, 0).Err()
-	if err != nil {
-		log.Println("Failed to cache URL:", err)
-	}
+	// err = repo.Redis.Set(shortURL, urlData.LongURL, 0).Err()
+	// if err != nil {
+	// 	log.Println("Failed to cache URL:", err)
+	// }
 
 	return urlData.LongURL, nil
 }
@@ -171,12 +170,12 @@ func (repo *URLRepository) DeleteExpiredURLs() error {
 		return nil
 	}
 
-	for _, shortURL := range shortURLs {
-		err := repo.Redis.Del(shortURL).Err()
-		if err != nil {
-			log.Printf("Failed to delete expired URL %s from Redis cache: %v", shortURL, err)
-		}
-	}
+	// for _, shortURL := range shortURLs {
+	// 	err := repo.Redis.Del(shortURL).Err()
+	// 	if err != nil {
+	// 		log.Printf("Failed to delete expired URL %s from Redis cache: %v", shortURL, err)
+	// 	}
+	// }
 
 	query := "SELECT short_url FROM short_url WHERE short_url IN ?"
 	_, err = repo.Postgres.Exec(query, shortURLs)

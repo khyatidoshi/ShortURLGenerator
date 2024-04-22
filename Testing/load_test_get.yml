@@ -1,0 +1,124 @@
+config:
+  target: 'http://127.0.0.1:4000'
+  phases:
+    - duration: 60  # total test duration in seconds
+      arrivalRate: 1 # initial requests per second
+      rampTo: 2     # target requests per second
+      name: "Ramp up to 30 requests per second"
+    - duration: 60  # hold phase at peak load
+      arrivalRate: 2
+      name: "Sustained peak load"
+
+scenarios:
+  - name: "Retrieve short URLs"
+    flow:
+      - get:
+          url: "/00021f46"
+      - get:
+          url: "/001fc6a0"
+      - get:
+          url: "/0025c771"
+      - get:
+          url: "/002d9bbf"
+      - get:
+          url: "/00680fdb"
+      - get:
+          url: "/006dc5bd"
+      - get:
+          url: "/0071dbe1"
+      - get:
+          url: "/007a7888"
+      - get:
+          url: "/00884464"
+      - get:
+          url: "/008b0dac"
+      - get:
+          url: "/0093bd6e"
+      - get:
+          url: "/0096bfd4"
+      - get:
+          url: "/009dcf24"
+      - get:
+          url: "/00a37833"
+      - get:
+          url: "/00a864fa"
+      - get:
+          url: "/00b4c26e"
+      - get:
+          url: "/00bcc064"
+      - get:
+          url: "/00c9680b"
+      - get:
+          url: "/00cdc8b2"
+      - get:
+          url: "/00d5f5af"
+      - get:
+          url: "/00d8f819"
+      - get:
+          url: "/00dd8563"
+      - get:
+          url: "/00de6d0a"
+      - get:
+          url: "/00e3d1bf"
+      - get:
+          url: "/010968b2"
+      - get:
+          url: "/24deed6b"
+      - get:
+          url: "/24e73881"
+      - get:
+          url: "/24fea88b"
+      - get:
+          url: "/25002794"
+      - get:
+          url: "/2505d1bd"
+      - get:
+          url: "/250b5fa7"
+      - get:
+          url: "/2510e01b"
+      - get:
+          url: "/2518a5ad"
+      - get:
+          url: "/25264ce3"
+      - get:
+          url: "/252a88ab"
+      - get:
+          url: "/252d48f7"
+      - get:
+          url: "/2539ae89"
+      - get:
+          url: "/257e9f38"
+      - get:
+          url: "/25854e6e"
+      - get:
+          url: "/258ce213"
+      - get:
+          url: "/25a485c1"
+      - get:
+          url: "/25b9531e"
+      - get:
+          url: "/25c2e3e3"
+      - get:
+          url: "/25c4c07d"
+      - get:
+          url: "/25c90641"
+      - get:
+          url: "/25ce0bd4"
+      - get:
+          url: "/25d7ee37"
+      - get:
+          url: "/25e2c7da"
+      - get:
+          url: "/25e333ad"
+      - get:
+          url: "/260ef533"
+      - get:
+          url: "/2617631f"
+      - get:
+          url: "/261d7a50"
+      - get:
+          url: "/2642fe05"
+      - get:
+          url: "/26431e78"
+      - get:
+          url: "/265cc1b1"
