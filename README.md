@@ -115,3 +115,7 @@ OR
 ```sh
 if locally installed --- npx artillery run *filename*
 ```
+Test results for Short URL generation :
+![Test Image 2](https://github.com/khyatidoshi/ShortURLGenerator/blob/main/GenerateURL_LoadTest.jpg)
+Test results for get Long URL / Redirection : 
+![Test Image 3](https://github.com/khyatidoshi/ShortURLGenerator/blob/main/RedirectionTest.jpg)
